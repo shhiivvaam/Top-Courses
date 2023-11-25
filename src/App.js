@@ -1,23 +1,60 @@
-import logo from './logo.svg';
 import './App.css';
+import Navbar from './components/Navbar'
+import Filter from './components/Filter'
+import Cards from './components/Cards'
+import Spinner from './components/Spinner';
+
+import { apiUrl, filterData } from './data';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 function App() {
+
+  const[courses, setCourse] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+
+  // useEffect(() => {
+  // async function fetchData() {
+    const fetchData = async () => {
+      // jab tak ye response aa rha hai tab tak loading ka ICON dikhega
+      setLoading(true);
+      try {
+        const res  = await fetch(apiUrl);
+        const output = await res.json();
+        // console.log(data);
+        
+        // save data into a variable
+        setCourse(output.data);
+      } catch(error) {
+        // console.log("Error : ", error);
+        toast.error("Something went wrong!!");
+      }
+      setLoading(false);
+    }
+
+    // fetchData();
+  // }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className='bg-[#262a38]'>
+        <Filter filterData={filterData} />
+        <div className='w-11/12 max-w-[1200px] mx-auto flex flex-wrap justify-center items-center min-h-[50vh]'>
+          {
+            loading 
+              ?
+            <Spinner/>
+              :
+            <Cards courses = {courses}/>
+          }
+        </div>
+      </div>
     </div>
   );
 }
