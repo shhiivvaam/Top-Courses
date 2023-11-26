@@ -11,7 +11,8 @@ import { toast } from 'react-toastify';
 function App() {
 
   const[courses, setCourse] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const[loading, setLoading] = useState(true);
+  const[category, setCategory] = useState(filterData[0].title);
 
 
   // useEffect(() => {
@@ -41,17 +42,17 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#262a38]">
       <Navbar />
       <div className='bg-[#262a38]'>
-        <Filter filterData={filterData} />
+        <Filter filterData={filterData} category={category} setCategory={setCategory}/>
         <div className='w-11/12 max-w-[1200px] mx-auto flex flex-wrap justify-center items-center min-h-[50vh]'>
           {
             loading 
               ?
             <Spinner/>
               :
-            <Cards courses = {courses}/>
+            <Cards courses = {courses} category={category}/>
           }
         </div>
       </div>
